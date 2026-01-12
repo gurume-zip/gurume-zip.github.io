@@ -132,6 +132,7 @@ export default function ListLayoutWithTags({
       ? decodeURI(pathname.split('/recipe/category/')[1]?.split('/')[0] || '')
       : ''
 
+  // 1. 사이드바 숫자는 전체 posts(allBlogs)를 기준으로 계산 (정상 노출됨)
   const categoryCounts: Record<string, number> = {}
   categoriesData.forEach((c) => (categoryCounts[c.category] = 0))
   posts.forEach((post) => {
@@ -145,7 +146,14 @@ export default function ListLayoutWithTags({
   const sortedTags = tagKeys.sort((a, b) => tagCounts[b] - tagCounts[a])
   const currentTag = isTagPage ? decodeURI(pathname.split('/tags/')[1]) : ''
 
-  const displayPosts = initialDisplayPosts.length > 0 ? initialDisplayPosts : posts
+  // ⭐⭐⭐ 수정된 로직 ⭐⭐⭐
+  // 카테고리나 태그 페이지일 때는 initialDisplayPosts가 0개여도 posts 전체를 보여주지 않습니다.
+  const isFilteredPage = pathname.includes('/category/') || pathname.includes('/tags/')
+  const displayPosts = isFilteredPage
+    ? initialDisplayPosts
+    : initialDisplayPosts.length > 0
+      ? initialDisplayPosts
+      : posts
 
   return (
     <div className="mx-auto max-w-7xl px-4">
@@ -156,9 +164,8 @@ export default function ListLayoutWithTags({
         </h1>
       </div>
 
-      {/* 1280px(xl) 미만일 때는 flex-col, 그 이상일 때는 flex-row */}
       <div className="flex flex-col xl:flex-row xl:space-x-16">
-        {/* 사이드바: xl 미만에서는 가로로 길게 배치될 수 있도록 조정 */}
+        {/* 사이드바 */}
         <aside className="mb-12 w-full xl:mb-0 xl:w-64">
           <div className="space-y-10 xl:sticky xl:top-24">
             {isRecipePage && (
@@ -214,82 +221,87 @@ export default function ListLayoutWithTags({
 
         {/* 메인 리스트 영역 */}
         <main className="flex-1">
-          <ul className="divide-y divide-gray-100 dark:divide-gray-800">
-            {displayPosts.map((post) => {
-              const { path, date, title, summary, tags, category, thumbnail, difficulty, time } =
-                post
-              const recipeUrl = `/${path.replace(/^blog\//, 'recipe/')}`
+          {displayPosts.length > 0 ? (
+            <ul className="divide-y divide-gray-100 dark:divide-gray-800">
+              {displayPosts.map((post) => {
+                const { path, date, title, summary, tags, category, thumbnail, difficulty, time } =
+                  post
+                const recipeUrl = `/${path.replace(/^blog\//, 'recipe/')}`
 
-              return (
-                <li key={path} className="group py-10 first:pt-0">
-                  <article className="flex flex-col items-start gap-8 sm:flex-row sm:gap-10">
-                    {/* 썸네일: 이전보다 시원하게 키운 크기 (w-64) */}
-                    <div className="relative h-64 w-full flex-shrink-0 overflow-hidden rounded-[2.5rem] border border-gray-100 bg-gray-50 sm:h-64 sm:w-64 dark:border-gray-800 dark:bg-gray-900">
-                      <Link href={recipeUrl}>
-                        <Image
-                          src={thumbnail || '/static/images/twitter-card.png'}
-                          alt={title}
-                          fill
-                          className="object-cover transition-transform duration-700 group-hover:scale-110"
-                        />
-                      </Link>
-                    </div>
+                return (
+                  <li key={path} className="group py-10 first:pt-0">
+                    <article className="flex flex-col items-start gap-8 sm:flex-row sm:gap-10">
+                      <div className="relative h-64 w-full flex-shrink-0 overflow-hidden rounded-[2.5rem] border border-gray-100 bg-gray-50 sm:h-64 sm:w-64 dark:border-gray-800 dark:bg-gray-900">
+                        <Link href={recipeUrl}>
+                          <Image
+                            src={thumbnail || '/static/images/twitter-card.png'}
+                            alt={title}
+                            fill
+                            className="object-cover transition-transform duration-700 group-hover:scale-110"
+                          />
+                        </Link>
+                      </div>
 
-                    <div className="min-w-0 flex-1 py-2">
-                      <div className="flex flex-col">
-                        <div className="mb-2 flex items-center gap-3">
-                          <time dateTime={date} className="text-[11px] font-bold text-gray-400">
-                            {formatToKoreanDate(date)}
-                          </time>
-                          {category && (
-                            <span className="rounded bg-gray-100 px-2 py-0.5 text-[10px] font-black text-gray-500 uppercase dark:bg-gray-800">
-                              {category}
-                            </span>
-                          )}
-                        </div>
-
-                        <h2 className="mb-4 text-2xl leading-tight font-black sm:text-3xl">
-                          <Link
-                            href={recipeUrl}
-                            className="hover:text-primary-500 text-gray-900 transition-colors dark:text-gray-100"
-                          >
-                            {title}
-                          </Link>
-                        </h2>
-
-                        <div className="mb-5 flex items-center gap-4 text-[12px] font-bold text-gray-500">
-                          {time && (
-                            <span className="flex items-center gap-1.5 rounded-lg border border-gray-100 bg-gray-50 px-2 py-1 dark:border-gray-800 dark:bg-gray-900">
-                              ⏱️ {time}
-                            </span>
-                          )}
-                          {difficulty !== undefined && (
-                            <span className="flex items-center gap-1 text-yellow-500">
-                              {'★'.repeat(Math.floor(difficulty))}
-                              <span className="text-gray-200">
-                                {'★'.repeat(5 - Math.floor(difficulty))}
+                      <div className="min-w-0 flex-1 py-2">
+                        <div className="flex flex-col">
+                          <div className="mb-2 flex items-center gap-3">
+                            <time dateTime={date} className="text-[11px] font-bold text-gray-400">
+                              {formatToKoreanDate(date)}
+                            </time>
+                            {category && (
+                              <span className="rounded bg-gray-100 px-2 py-0.5 text-[10px] font-black text-gray-500 uppercase dark:bg-gray-800">
+                                {category}
                               </span>
-                            </span>
-                          )}
-                        </div>
+                            )}
+                          </div>
 
-                        <p className="mb-6 line-clamp-2 text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                          {summary}
-                        </p>
+                          <h2 className="mb-4 text-2xl leading-tight font-black sm:text-3xl">
+                            <Link
+                              href={recipeUrl}
+                              className="hover:text-primary-500 text-gray-900 transition-colors dark:text-gray-100"
+                            >
+                              {title}
+                            </Link>
+                          </h2>
 
-                        <div className="flex flex-wrap gap-2">
-                          {tags?.slice(0, 5).map((tag) => (
-                            <Tag key={tag} text={tag} />
-                          ))}
+                          <div className="mb-5 flex items-center gap-4 text-[12px] font-bold text-gray-500">
+                            {time && (
+                              <span className="flex items-center gap-1.5 rounded-lg border border-gray-100 bg-gray-50 px-2 py-1 dark:border-gray-800 dark:bg-gray-900">
+                                ⏱️ {time}
+                              </span>
+                            )}
+                            {difficulty !== undefined && (
+                              <span className="flex items-center gap-1 text-yellow-500">
+                                {'★'.repeat(Math.floor(difficulty))}
+                                <span className="text-gray-200">
+                                  {'★'.repeat(5 - Math.floor(difficulty))}
+                                </span>
+                              </span>
+                            )}
+                          </div>
+
+                          <p className="mb-6 line-clamp-2 text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                            {summary}
+                          </p>
+
+                          <div className="flex flex-wrap gap-2">
+                            {tags?.slice(0, 5).map((tag) => (
+                              <Tag key={tag} text={tag} />
+                            ))}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </article>
-                </li>
-              )
-            })}
-          </ul>
-          {pagination && (
+                    </article>
+                  </li>
+                )
+              })}
+            </ul>
+          ) : (
+            <div className="py-20 text-center">
+              <p className="text-lg font-bold text-gray-400">아직 등록된 레시피가 없습니다. 🥘</p>
+            </div>
+          )}
+          {pagination && pagination.totalPages > 1 && (
             <Pagination currentPage={pagination.currentPage} totalPages={pagination.totalPages} />
           )}
         </main>
