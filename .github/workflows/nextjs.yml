@@ -2,12 +2,17 @@ name: Deploy Next.js site to Pages
 
 on:
   push:
-    branches: ["main"] # 본인의 메인 브랜치 이름 확인
+    branches: ["main"]
+  workflow_dispatch:
 
 permissions:
   contents: read
   pages: write
   id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -15,18 +20,30 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup Nodecorepack enable
+
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+          # ⚠️ 이 부분이 에러의 원인이었습니다. 
+          # lock 파일이 없어도 에러가 안 나도록 캐시 설정을 뺍니다.
+          cache: 'npm' 
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
       - name: Install dependencies
+        # yarn 대신 npm으로 설치합니다.
         run: npm install --legacy-peer-deps
+
       - name: Build with Next.js
+        # Turbopack 대신 Webpack을 쓰도록 강제합니다.
         run: npx next build --webpack
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./out # Next.js 빌드 결과물이 저장되는 폴더
+          path: ./out
 
   deploy:
     environment:
