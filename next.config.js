@@ -5,7 +5,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
 
-// You might need to insert additional domains in script-src if you are using external services
+// CSP 설정
 const ContentSecurityPolicy = `
   default-src 'self';
   script-src 'self' 'unsafe-eval' 'unsafe-inline' giscus.app analytics.umami.is;
@@ -26,11 +26,6 @@ const securityHeaders = [
     key: 'Referrer-Policy',
     value: 'strict-origin-when-cross-origin',
   },
-  // ❌ 유튜브 임베드 막는 원인 → 삭제됨
-  // {
-  //   key: 'X-Frame-Options',
-  //   value: 'DENY',
-  // },
   {
     key: 'X-Content-Type-Options',
     value: 'nosniff',
@@ -49,21 +44,28 @@ const securityHeaders = [
   },
 ]
 
-const output = process.env.EXPORT ? 'export' : undefined
 const basePath = process.env.BASE_PATH || undefined
 const unoptimized = process.env.UNOPTIMIZED ? true : undefined
 
 /**
- * @type {import('next/dist/next-server/server/config').NextConfig}
+ * @type {import('next').NextConfig}
  **/
 module.exports = () => {
   const plugins = [withContentlayer, withBundleAnalyzer]
   return plugins.reduce((acc, next) => next(acc), {
-    output: 'export',
+    output: 'export', // 정적 배포 필수 설정
     basePath,
     reactStrictMode: true,
     trailingSlash: false,
     pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
+
+    // 추가: Turbopack 대신 Webpack을 사용하도록 강제 (Next.js 16 에러 방지)
+    experimental: {
+      turbo: {
+        rules: {},
+      },
+    },
+
     eslint: {
       dirs: ['app', 'components', 'layouts', 'scripts'],
     },
@@ -84,28 +86,18 @@ module.exports = () => {
         },
       ]
     },
+    // 참고: output: 'export' 모드에서는 rewrites가 작동하지 않을 수 있습니다.
+    // 하지만 빌드 에러를 막기 위해 유지합니다.
     async rewrites() {
       return [
-        {
-          source: '/recipe',
-          destination: '/blog',
-        },
-        {
-          source: '/recipe/page/:page',
-          destination: '/blog/page/:page',
-        },
-        {
-          source: '/recipe/category/:category',
-          destination: '/blog/category/:category',
-        },
+        { source: '/recipe', destination: '/blog' },
+        { source: '/recipe/page/:page', destination: '/blog/page/:page' },
+        { source: '/recipe/category/:category', destination: '/blog/category/:category' },
         {
           source: '/recipe/category/:category/page/:page',
           destination: '/blog/category/:category/page/:page',
         },
-        {
-          source: '/recipe/:slug*',
-          destination: '/blog/:slug*',
-        },
+        { source: '/recipe/:slug*', destination: '/blog/:slug*' },
       ]
     },
     webpack: (config, options) => {
