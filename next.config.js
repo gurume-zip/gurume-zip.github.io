@@ -5,7 +5,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
 
-// 배포 환경인지 확인 (production일 때만 output: 'export' 적용)
+// 배포 환경인지 확인
 const isProd = process.env.NODE_ENV === 'production'
 
 // CSP 설정
@@ -55,7 +55,7 @@ const basePath = process.env.BASE_PATH || undefined
 module.exports = () => {
   const plugins = [withContentlayer, withBundleAnalyzer]
   return plugins.reduce((acc, next) => next(acc), {
-    // ✅ 로컬 개발 시(dev)에는 undefined, 배포 빌드 시에만 'export' 사용
+    // ✅ 로컬 개발 시에는 서버 기능을 살리고, 배포 시에만 export
     output: isProd ? 'export' : undefined,
 
     basePath,
@@ -89,7 +89,6 @@ module.exports = () => {
     },
 
     async headers() {
-      // output: 'export' 모드에서는 headers가 무시되지만, 로컬 개발을 위해 유지
       return [
         {
           source: '/(.*)',
@@ -98,18 +97,10 @@ module.exports = () => {
       ]
     },
 
+    // 🛠️ 중요: 실제 폴더가 app/recipe라면 리라이트가 필요 없습니다.
+    // 오히려 존재하지 않는 /blog로 보내버려서 404가 발생했던 것입니다.
     async rewrites() {
-      // output: 'export' 모드에서는 rewrites가 무시되지만, 로컬 개발 시 주소 연결을 위해 유지
-      return [
-        { source: '/recipe', destination: '/blog' },
-        { source: '/recipe/page/:page', destination: '/blog/page/:page' },
-        { source: '/recipe/category/:category', destination: '/blog/category/:category' },
-        {
-          source: '/recipe/category/:category/page/:page',
-          destination: '/blog/category/:category/page/:page',
-        },
-        { source: '/recipe/:slug*', destination: '/blog/:slug*' },
-      ]
+      return []
     },
 
     webpack: (config) => {
