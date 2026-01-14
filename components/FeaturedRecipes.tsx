@@ -58,7 +58,7 @@ export default function FeaturedRecipes({ recipes }: FeaturedRecipesProps) {
           {displayRecipes.map((recipe) => (
             <Link
               key={recipe.slug}
-              href={`/blog/${recipe.slug}`}
+              href={`/recipe/${recipe.slug}`}
               className="group overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all hover:shadow-xl dark:border-gray-800 dark:bg-gray-800"
             >
               <div className="relative aspect-[16/10] overflow-hidden border-b border-gray-50 bg-gray-100 dark:border-gray-700 dark:bg-gray-900">

@@ -3,17 +3,15 @@
 @plugin '@tailwindcss/typography';
 @source '../node_modules/pliny';
 
-/* 1. 웹폰트 임포트 (파일 최상단) */
-/* 프리텐다드 (본문용) */
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
-
-/* 어그로체 (제목용) */
+/* 1. 폰트 임포트 */
+/* 제목용 (프리텐다드) */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css');
+/* 본문 및 나머지용 (이서윤체) */
 @font-face {
-  font-family: 'SBAggroB';
-  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SBAggroB.woff')
+  font-family: 'IsYun';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2202-2@1.0/LeeSeoyun.woff')
     format('woff');
-  font-weight: 700;
-  font-style: normal;
+  font-weight: normal;
   font-display: swap;
 }
 
@@ -21,15 +19,15 @@
 
 /* 2. 통합 테마 설정 */
 @theme {
-  /* Font families: 프리텐다드를 가장 앞에 배치 */
+  /* 기본 폰트를 'IsYun'으로 설정하여 전체 적용 */
   --font-sans:
-    'Pretendard', var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif,
-    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    'IsYun', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Color Emoji';
 
-  /* 커스텀 제목 폰트 변수 등록 */
-  --font-title: 'SBAggroB', sans-serif;
+  /* h1 전용 폰트 변수 */
+  --font-h1: 'Pretendard', sans-serif;
 
-  /* Colors (Primary - 도파민 레시피 컨셉) */
+  /* Colors (도파민 레시피 컨셉) */
   --color-primary-50: oklch(0.971 0.014 343.198);
   --color-primary-100: oklch(0.948 0.028 342.258);
   --color-primary-200: oklch(0.899 0.061 343.231);
@@ -64,7 +62,7 @@
   --z-80: 80;
 }
 
-/* 3. 베이스 레이어 설정: 실제 태그에 폰트 주입 */
+/* 3. 베이스 레이어 설정 */
 @layer base {
   *,
   ::after,
@@ -75,18 +73,25 @@
   }
 
   body {
+    /* 기본적으로 이서윤체가 모든 곳에 적용됩니다 */
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    word-break: keep-all; /* 한글 가독성을 위해 단어 단위 줄바꿈 */
   }
 
-  /* 모든 제목 태그와 .font-title 클래스에 어그로체 적용 */
-  h1,
+  /* h1 태그만 프리텐다드 적용 */
+  h1 {
+    font-family: var(--font-h1);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  /* h2 이하는 손글씨(이서윤체) 유지하되 굵기만 조절 */
   h2,
   h3,
-  h4,
-  .font-title {
-    font-family: var(--font-title);
-    letter-spacing: -0.03em; /* 굵은 폰트일수록 자간을 줄여야 예쁩니다 */
+  h4 {
+    font-family: var(--font-sans);
+    font-weight: 700;
   }
 
   a,
@@ -105,6 +110,7 @@
 /* 4. 유틸리티 레이어 (prose 및 애니메이션) */
 @layer utilities {
   .prose {
+    font-family: var(--font-sans); /* 본문 가독성 */
     & a {
       color: var(--color-primary-500);
       &:hover {
@@ -114,12 +120,12 @@
         color: var(--color-primary-400);
       }
     }
-    & :where(h1, h2) {
+    & h1 {
+      font-family: var(--font-h1); /* prose 내부 h1도 프리텐다드 */
+    }
+    & :where(h2, h3) {
       font-weight: 700;
       letter-spacing: var(--tracking-tight);
-    }
-    & h3 {
-      font-weight: 600;
     }
     & :where(code):not(pre code) {
       color: var(--color-indigo-500);
@@ -141,7 +147,7 @@
     }
   }
 
-  /* 애니메이션 효과 */
+  /* 애니메이션 및 기타 컴포넌트 */
   .animate-gradient {
     background-size: 200% 200%;
     animation: gradient 3s ease infinite;
@@ -158,22 +164,20 @@
     border: 1px solid rgba(255, 255, 255, 0.2);
   }
 
-  @layer utilities {
-    .pick-card {
-      @apply my-8 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900;
-    }
+  .pick-card {
+    @apply my-8 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900;
+  }
 
-    .pick-header {
-      @apply flex items-center gap-2 bg-orange-500 px-4 py-2 text-[11px] font-black tracking-widest text-white uppercase;
-    }
+  .pick-header {
+    @apply flex items-center gap-2 bg-orange-500 px-4 py-2 text-[11px] font-black tracking-widest text-white uppercase;
+  }
 
-    .pick-body {
-      @apply flex flex-col gap-3 p-5;
-    }
+  .pick-body {
+    @apply flex flex-col gap-3 p-5;
+  }
 
-    .pick-link {
-      @apply inline-flex items-center justify-between rounded-xl bg-gray-50 px-4 py-3 text-sm font-bold text-gray-900 transition-colors hover:bg-orange-50 hover:text-orange-600 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700;
-    }
+  .pick-link {
+    @apply inline-flex items-center justify-between rounded-xl bg-gray-50 px-4 py-3 text-sm font-bold text-gray-900 transition-colors hover:bg-orange-50 hover:text-orange-600 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700;
   }
 }
 

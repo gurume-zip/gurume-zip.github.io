@@ -54,7 +54,7 @@ export default function LatestRecipes({ posts }: { posts: Post[] }) {
               return (
                 <Link
                   key={slug}
-                  href={`/blog/${slug}`}
+                  href={`/recipe/${slug}`}
                   className="group block rounded-2xl border border-gray-100 bg-white p-5 transition-all hover:border-orange-200 hover:shadow-xl sm:p-6 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-orange-900/30"
                 >
                   <article className="flex flex-col gap-6 md:flex-row">
