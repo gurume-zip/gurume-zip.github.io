@@ -12,8 +12,15 @@ export const generateStaticParams = async () => {
   categories.forEach((category) => {
     const filteredPosts = allBlogs.filter((post) => post.category === category)
     const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE)
-    for (let i = 1; i <= totalPages; i++) {
-      params.push({ category: encodeURI(category), page: i.toString() })
+
+    // 핵심 수정: 글이 없어도 최소 1페이지는 생성하도록 보장 (빌드 에러 방지)
+    const pagesToGenerate = totalPages > 0 ? totalPages : 1
+
+    for (let i = 1; i <= pagesToGenerate; i++) {
+      params.push({
+        category: category, // encodeURI 없이 직접 전달 (Next.js가 자동 처리)
+        page: i.toString(),
+      })
     }
   })
 
@@ -24,7 +31,8 @@ export default async function CategoryPage(props: {
   params: Promise<{ category: string; page: string }>
 }) {
   const params = await props.params
-  const category = decodeURI(params.category)
+  // Next.js 15+ 에서는 params가 이미 디코딩되어 들어오는 경우가 많으므로 안전하게 처리
+  const category = params.category
   const pageNumber = parseInt(params.page)
 
   const categoryNames: Record<string, string> = {
@@ -37,16 +45,14 @@ export default async function CategoryPage(props: {
   }
   const categoryName = categoryNames[category] || category
 
-  // 모든 포스트를 posts로 전달 (사이드바 카운트용)
   const allPosts = allCoreContent(sortPosts(allBlogs))
-
-  // 필터링된 포스트만 표시용으로 사용
   const filteredPosts = allCoreContent(
     sortPosts(allBlogs.filter((post) => post.category === category))
   )
   const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE)
 
-  if (pageNumber <= 0 || pageNumber > totalPages || isNaN(pageNumber)) {
+  // 글이 하나도 없는 카테고리의 1페이지는 404가 아닌 '글 없음'으로 보여주는 것이 빌드에 안전합니다.
+  if (pageNumber < 1 || (totalPages > 0 && pageNumber > totalPages) || isNaN(pageNumber)) {
     return notFound()
   }
 
@@ -54,9 +60,10 @@ export default async function CategoryPage(props: {
     POSTS_PER_PAGE * (pageNumber - 1),
     POSTS_PER_PAGE * pageNumber
   )
+
   const pagination = {
     currentPage: pageNumber,
-    totalPages: totalPages,
+    totalPages: totalPages === 0 ? 1 : totalPages,
   }
 
   return (
