@@ -1,7 +1,6 @@
 import 'css/prism.css'
 import 'katex/dist/katex.css'
 
-import PageTitle from '@/components/PageTitle'
 import { components } from '@/components/MDXComponents'
 import { MDXLayoutRenderer } from 'pliny/mdx-components'
 import { sortPosts, coreContent, allCoreContent } from 'pliny/utils/contentlayer'
@@ -21,19 +20,19 @@ const layouts = {
   PostBanner,
 }
 
-// 1. Static Params 생성 (빌드 에러 해결의 핵심)
-export const generateStaticParams = async () => {
-  // decodeURI를 사용하지 않고 원본 slug를 배열로 전달합니다.
+/* --- 중요: 이 부분이 정확해야 에러가 사라집니다 --- */
+export async function generateStaticParams() {
   return allBlogs.map((p) => ({
     slug: p.slug.split('/'),
   }))
 }
+/* ------------------------------------------- */
 
 export async function generateMetadata(props: {
   params: Promise<{ slug: string[] }>
 }): Promise<Metadata | undefined> {
-  const params = await props.params
-  const slug = decodeURI(params.slug.join('/'))
+  const { slug: slugArray } = await props.params
+  const slug = decodeURI(slugArray.join('/'))
   const post = allBlogs.find((p) => p.slug === slug)
   if (!post) return
 
@@ -41,19 +40,6 @@ export async function generateMetadata(props: {
   const authorDetails = authorList.map((author) => {
     const authorResults = allAuthors.find((p) => p.slug === author)
     return coreContent(authorResults as Authors)
-  })
-
-  const publishedAt = new Date(post.date).toISOString()
-  const modifiedAt = new Date(post.lastmod || post.date).toISOString()
-  const authors = authorDetails.map((author) => author.name)
-  let imageList = [siteMetadata.socialBanner]
-  if (post.thumbnail) {
-    imageList = typeof post.thumbnail === 'string' ? [post.thumbnail] : post.thumbnail
-  }
-  const ogImages = imageList.map((img) => {
-    return {
-      url: img && img.includes('http') ? img : siteMetadata.siteUrl + img,
-    }
   })
 
   return {
@@ -65,24 +51,14 @@ export async function generateMetadata(props: {
       siteName: siteMetadata.title,
       locale: 'ko_KR',
       type: 'article',
-      publishedTime: publishedAt,
-      modifiedTime: modifiedAt,
       url: './',
-      images: ogImages,
-      authors: authors.length > 0 ? authors : [siteMetadata.author],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: post.title,
-      description: post.summary,
-      images: imageList,
     },
   }
 }
 
 export default async function Page(props: { params: Promise<{ slug: string[] }> }) {
-  const params = await props.params
-  const slug = decodeURI(params.slug.join('/'))
+  const { slug: slugArray } = await props.params
+  const slug = decodeURI(slugArray.join('/'))
 
   const sortedCoreContents = allCoreContent(sortPosts(allBlogs))
   const postIndex = sortedCoreContents.findIndex((p) => p.slug === slug)
@@ -102,25 +78,11 @@ export default async function Page(props: { params: Promise<{ slug: string[] }> 
   })
 
   const mainContent = coreContent(post)
-  const jsonLd = post.structuredData
-  jsonLd['author'] = authorDetails.map((author) => {
-    return {
-      '@type': 'Person',
-      name: author.name,
-    }
-  })
-
   const Layout = layouts[post.layout || defaultLayout]
 
   return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <Layout content={mainContent} authorDetails={authorDetails} next={next} prev={prev}>
-        <MDXLayoutRenderer code={post.body.code} components={components} toc={post.toc} />
-      </Layout>
-    </>
+    <Layout content={mainContent} authorDetails={authorDetails} next={next} prev={prev}>
+      <MDXLayoutRenderer code={post.body.code} components={components} toc={post.toc} />
+    </Layout>
   )
 }

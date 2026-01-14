@@ -1,8 +1,6 @@
-/* 1. 최상단: 모든 @import 규칙 (순서 중요) */
-@import 'tailwindcss';
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css');
+@import 'tailwindcss';
 
-/* 2. 플러그인 및 설정 */
 @plugin "@tailwindcss/forms";
 @plugin '@tailwindcss/typography';
 @source '../node_modules/pliny';
