@@ -11,6 +11,7 @@ import Footer from '@/components/Footer'
 import siteMetadata from '@/data/siteMetadata'
 import { ThemeProviders } from './theme-providers'
 import { Metadata } from 'next'
+import Script from 'next/script' // Next.js용 스크립트 컴포넌트 추가
 
 const space_grotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -67,35 +68,55 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${space_grotesk.variable} scroll-smooth`}
       suppressHydrationWarning
     >
-      <link
-        rel="apple-touch-icon"
-        sizes="76x76"
-        href={`${basePath}/static/favicons/apple-touch-icon.png`}
+      {/* 구글 애널리틱스 스크립트 (성능 최적화 적용) */}
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=G-LVF37JG82C"
+        strategy="afterInteractive"
       />
-      <link
-        rel="icon"
-        type="image/png"
-        sizes="32x32"
-        href={`${basePath}/static/favicons/favicon-32x32.png`}
-      />
-      <link
-        rel="icon"
-        type="image/png"
-        sizes="16x16"
-        href={`${basePath}/static/favicons/favicon-16x16.png`}
-      />
-      <link rel="manifest" href={`${basePath}/static/favicons/site.webmanifest`} />
-      <link
-        rel="mask-icon"
-        href={`${basePath}/static/favicons/safari-pinned-tab.svg`}
-        color="#5bbad5"
-      />
-      <meta name="google-site-verification" content="RjYvdC6isnNAu-Ko6LXHUSiySjZDDpgsL417Hv5Vv0g" />
-      <meta name="naver-site-verification" content="2475ade58886eb7328c2db8cc51b16166ee87b13" />
-      <meta name="msapplication-TileColor" content="#000000" />
-      <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fff" />
-      <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000" />
-      <link rel="alternate" type="application/rss+xml" href={`${basePath}/feed.xml`} />
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-LVF37JG82C');
+        `}
+      </Script>
+
+      <head>
+        <link
+          rel="apple-touch-icon"
+          sizes="76x76"
+          href={`${basePath}/static/favicons/apple-touch-icon.png`}
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href={`${basePath}/static/favicons/favicon-32x32.png`}
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href={`${basePath}/static/favicons/favicon-16x16.png`}
+        />
+        <link rel="manifest" href={`${basePath}/static/favicons/site.webmanifest`} />
+        <link
+          rel="mask-icon"
+          href={`${basePath}/static/favicons/safari-pinned-tab.svg`}
+          color="#5bbad5"
+        />
+        <meta
+          name="google-site-verification"
+          content="RjYvdC6isnNAu-Ko6LXHUSiySjZDDpgsL417Hv5Vv0g"
+        />
+        <meta name="naver-site-verification" content="2475ade58886eb7328c2db8cc51b16166ee87b13" />
+        <meta name="msapplication-TileColor" content="#000000" />
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fff" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000" />
+        <link rel="alternate" type="application/rss+xml" href={`${basePath}/feed.xml`} />
+      </head>
       <body className="bg-white pl-[calc(100vw-100%)] text-black antialiased dark:bg-gray-950 dark:text-white">
         <ThemeProviders>
           <Analytics analyticsConfig={siteMetadata.analytics as AnalyticsConfig} />
