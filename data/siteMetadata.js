@@ -4,7 +4,7 @@ const siteMetadata = {
   author: '고메.zip',
   headerTitle: '고메.zip',
   description:
-    '미슐랭급 맛을 압축한 비밀 레시피 파일 📂 아는 맛의 하이엔드화, 도파민 레시피 고메.zip',
+    '고메집(gourmetzip)에 오신 것을 환영합니다! 미슐랭급 맛을 압축한 비밀 레시피 파일 📂 아는 맛의 하이엔드화, 도파민 폭발 레시피를 고메.zip에서 확인하세요.',
   language: 'ko-kr',
   theme: 'system', // system, dark or light
   siteUrl: 'https://gourmetzip.github.io/', // 나중에 실제 도메인으로 변경하세요

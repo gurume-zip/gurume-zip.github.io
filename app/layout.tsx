@@ -11,7 +11,7 @@ import Footer from '@/components/Footer'
 import siteMetadata from '@/data/siteMetadata'
 import { ThemeProviders } from './theme-providers'
 import { Metadata } from 'next'
-import Script from 'next/script' // Next.js용 스크립트 컴포넌트 추가
+import Script from 'next/script'
 
 const space_grotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -62,13 +62,21 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const basePath = process.env.BASE_PATH || ''
 
+  // 검색 결과 개선을 위한 JSON-LD 데이터 구성
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: '고메.zip',
+    alternateName: ['고메집', 'gourmetzip', '고메지입'], // '고메집'으로 검색해도 나오도록 설정
+    url: siteMetadata.siteUrl,
+  }
+
   return (
     <html
       lang={siteMetadata.language}
       className={`${space_grotesk.variable} scroll-smooth`}
       suppressHydrationWarning
     >
-      {/* 구글 애널리틱스 스크립트 (성능 최적화 적용) */}
       <Script
         src="https://www.googletagmanager.com/gtag/js?id=G-LVF37JG82C"
         strategy="afterInteractive"
@@ -84,6 +92,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </Script>
 
       <head>
+        {/* JSON-LD 삽입: 고메.zip과 고메집을 동일 사이트로 연결 */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <link
           rel="apple-touch-icon"
           sizes="76x76"
@@ -94,6 +107,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="image/png"
           sizes="32x32"
           href={`${basePath}/static/favicons/favicon-32x32.png`}
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="96x96"
+          href={`${basePath}/static/favicons/favicon-96x96.png`}
         />
         <link
           rel="icon"
