@@ -1,27 +1,27 @@
 /** @type {import("pliny/config").PlinyConfig } */
 const siteMetadata = {
-  title: '고메.zip | gourmetzip',
-  author: '고메.zip',
-  headerTitle: '고메.zip',
+  title: '면시피 | myeoncipe',
+  author: '면시피',
+  headerTitle: '면시피',
   description:
-    '고메집(gourmetzip)에 오신 것을 환영합니다! 미슐랭급 맛을 압축한 비밀 레시피 파일 📂 아는 맛의 하이엔드화, 도파민 폭발 레시피를 고메.zip에서 확인하세요.',
+    '면시피(myeoncipe)에 오신 것을 환영합니다! 미슐랭급 맛을 압축한 비밀 레시피 파일 📂 아는 맛의 하이엔드화, 도파민 폭발 레시피를 면시피에서 확인하세요.',
   language: 'ko-kr',
   theme: 'system', // system, dark or light
-  siteUrl: 'https://gourmetzip.github.io/', // 나중에 실제 도메인으로 변경하세요
-  siteRepo: 'https://gourmetzip.github.io/',
+  siteUrl: 'https://myeoncipe.github.io/', // 나중에 실제 도메인으로 변경하세요
+  siteRepo: 'https://myeoncipe.github.io/',
   siteLogo: `${process.env.BASE_PATH || ''}/static/images/logo.png`,
   socialBanner: `${process.env.BASE_PATH || ''}/static/images/twitter-card.png`,
   // mastodon: 'https://mastodon.social/@mastodonuser',
   email: 'cyd9911@gmail.com',
   // github: 'https://github.com', // 깃허브 주소
   // x: 'https://twitter.com/x',
-  youtube: 'https://www.youtube.com/channel/UCVgAAVNMJk3Z4mHR6iEsYfw',
+  youtube: 'https://www.youtube.com/@%EB%A9%B4%EC%8B%9C%ED%94%BC-p4o',
   // linkedin: 'https://www.linkedin.com',
   // threads: 'https://www.threads.net',
-  instagram: 'https://www.instagram.com/gourmetzip',
+  instagram: 'https://www.instagram.com/myeoncipe',
   // medium: 'https://medium.com',
   // bluesky: 'https://bsky.app/',
-  tiktok: 'https://www.tiktok.com/@gourmetzip',
+  tiktok: 'https://www.tiktok.com/@myeoncipe',
   locale: 'ko-KR',
   stickyNav: true, // 트렌디한 사이트는 헤더가 고정된 경우가 많아 true 추천
   analytics: {

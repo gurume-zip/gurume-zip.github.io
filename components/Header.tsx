@@ -21,7 +21,7 @@ const Header = () => {
       <Link href="/" aria-label={siteMetadata.headerTitle}>
         <div className="flex items-center justify-between">
           <div className="font-title text-2xl font-black tracking-tighter text-gray-900 dark:text-white">
-            고메<span className="text-orange-500">.</span>zip
+            면시피
           </div>
         </div>
       </Link>

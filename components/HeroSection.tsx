@@ -9,7 +9,7 @@ interface HeroSectionProps {
 }
 
 export default function HeroSection({
-  channelName = '레시피 채널',
+  channelName = '면시피 MyeonCipe',
   heroImage,
   heroVideo,
 }: HeroSectionProps) {
@@ -43,61 +43,61 @@ export default function HeroSection({
 
       {/* 3. 메인 콘텐츠 */}
       <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col items-center px-6">
-        {/* 배지 디자인 개선 */}
+        {/* 배지 디자인: 컨셉 반영 */}
         <div className="mb-8 flex items-center gap-2 rounded-full border border-gray-100 bg-white px-4 py-1.5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
           <span className="relative flex h-2 w-2">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-orange-400 opacity-75"></span>
             <span className="relative inline-flex h-2 w-2 rounded-full bg-orange-500"></span>
           </span>
           <span className="text-xs font-black tracking-tight text-gray-600 sm:text-sm dark:text-gray-400">
-            TODAY'S DOPAMINE MENU
+            UNZIPPING NEW RECIPE.zip
           </span>
         </div>
 
-        {/* 메인 타이틀: 폰트 두께와 자간 최적화 */}
+        {/* 메인 타이틀: 면시피 브랜딩 반영 */}
         <div className="mb-10 text-center">
           <h1 className="mb-6 text-5xl leading-[1.1] font-[900] tracking-tighter text-gray-900 sm:text-7xl md:text-8xl dark:text-white">
-            아는 맛이{' '}
+            미식을{' '}
             <span className="block text-orange-600 italic drop-shadow-sm dark:text-orange-500">
-              더 무서운
+              압축하다
             </span>
           </h1>
           <p className="mx-auto max-w-2xl text-xl leading-tight font-bold text-gray-500 sm:text-2xl dark:text-gray-400">
-            오늘 밤 당신의 다이어트를 실패하게 할 <br className="hidden sm:block" />
+            가장 직관적인 1분 요리 문법 <br className="hidden sm:block" />
             <span className="border-b-4 border-orange-200 text-gray-900 dark:border-orange-900/50 dark:text-gray-200">
-              마성의 도파민 한 끼.
+              {channelName} 아카이브 해제 중.
             </span>
           </p>
         </div>
 
-        {/* 버튼 그룹: 더 크고 볼드하게 */}
+        {/* 버튼 그룹: 텍스트 및 링크 수정 */}
         <div className="flex w-full flex-col gap-4 sm:w-auto sm:flex-row">
           <Link
-            href="/recipe"
+            href="/blog"
             className="group relative flex items-center justify-center overflow-hidden rounded-3xl bg-gray-900 px-10 py-5 text-lg font-black text-white shadow-2xl transition-all hover:scale-105 active:scale-95 dark:bg-white dark:text-gray-900"
           >
             <span className="relative z-10 flex items-center gap-2">
-              레시피 보러가기 <span className="text-xl">🥘</span>
+              레시피 압축해제 <span className="text-xl">🍝</span>
             </span>
             <div className="absolute inset-0 translate-y-[101%] bg-orange-600 transition-transform duration-300 group-hover:translate-y-0" />
           </Link>
 
           <Link
-            href="https://youtube.com"
+            href="https://youtube.com/@myeoncipe"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center rounded-3xl border-2 border-gray-100 bg-white px-10 py-5 text-lg font-black text-gray-900 shadow-sm transition-all hover:border-gray-200 hover:bg-gray-50 active:scale-95 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
           >
-            YouTube 구독하기
+            YouTube 구독
           </Link>
         </div>
 
-        {/* 4. 플로팅 이모지 장식 (트렌디 포인트) */}
+        {/* 4. 플로팅 이모지 장식: 면 요리 컨셉으로 변경 */}
         <div className="absolute top-1/2 left-10 hidden -translate-y-1/2 -rotate-12 animate-bounce transition-all duration-1000 lg:block">
-          <span className="text-7xl drop-shadow-xl">🌶️</span>
+          <span className="text-7xl drop-shadow-xl">🍝</span>
         </div>
         <div className="absolute top-[40%] right-10 hidden translate-y-1/2 rotate-12 animate-bounce [animation-delay:0.5s] lg:block">
-          <span className="text-8xl drop-shadow-xl">🧀</span>
+          <span className="text-8xl drop-shadow-xl">🍜</span>
         </div>
       </div>
 

@@ -66,8 +66,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: '고메.zip',
-    alternateName: ['고메집', 'gourmetzip', '고메지입'], // '고메집'으로 검색해도 나오도록 설정
+    name: '면시피',
+    alternateName: ['면시피', 'myeoncipe'],
     url: siteMetadata.siteUrl,
   }
 
@@ -92,7 +92,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </Script>
 
       <head>
-        {/* JSON-LD 삽입: 고메.zip과 고메집을 동일 사이트로 연결 */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
