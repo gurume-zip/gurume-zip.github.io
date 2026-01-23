@@ -25,19 +25,20 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          # ❌ 여기서 cache 관련 줄을 다 지웠습니다. 
-          # 이렇게 해야 깃허브가 yarn.lock이 없다고 화내지 않습니다.
+          # 캐시를 완전히 제거하여 매번 새로운 상태로 빌드하게 유도합니다.
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
       - name: Install dependencies
-        # lock 파일이 없어도 npm이 알아서 설치하도록 합니다.
+        # legacy-peer-deps로 충돌을 방지하며 깔끔하게 설치합니다.
         run: npm install --legacy-peer-deps
 
-      - name: Build with Next.js
-        # Webpack 엔진을 사용하여 빌드합니다.
-        run: npx next build --webpack
+      - name: Build Contentlayer & Next.js
+        # ⚠️ 핵심: contentlayer를 먼저 빌드하여 MDX 데이터를 새로 생성한 뒤 Next 빌드를 시작합니다.
+        run: |
+          npx contentlayer2 build
+          npx next build --webpack
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
