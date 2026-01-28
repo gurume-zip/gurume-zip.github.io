@@ -73,7 +73,7 @@ export default function HeroSection({
         {/* 버튼 그룹: 텍스트 및 링크 수정 */}
         <div className="flex w-full flex-col gap-4 sm:w-auto sm:flex-row">
           <Link
-            href="/blog"
+            href="/recipe"
             className="group relative flex items-center justify-center overflow-hidden rounded-3xl bg-gray-900 px-10 py-5 text-lg font-black text-white shadow-2xl transition-all hover:scale-105 active:scale-95 dark:bg-white dark:text-gray-900"
           >
             <span className="relative z-10 flex items-center gap-2">
@@ -83,7 +83,7 @@ export default function HeroSection({
           </Link>
 
           <Link
-            href="https://youtube.com/@myeoncipe"
+            href="https://www.youtube.com/@%EB%A9%B4%EC%8B%9C%ED%94%BC-p4o"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center rounded-3xl border-2 border-gray-100 bg-white px-10 py-5 text-lg font-black text-gray-900 shadow-sm transition-all hover:border-gray-200 hover:bg-gray-50 active:scale-95 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
