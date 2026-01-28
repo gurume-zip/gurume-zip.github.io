@@ -79,16 +79,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       {/* Google tag (gtag.js) */}
       <Script
-        src="https://www.googletagmanager.com/gtag/js?id=G-LVF37JG82C"
+        src="https://www.googletagmanager.com/gtag/js?id=G-Q9JP6VYKGR"
         strategy="afterInteractive"
       />
       <Script id="google-analytics" strategy="afterInteractive">
         {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
 
-          gtag('config', 'G-LVF37JG82C');
+            gtag('config', 'G-Q9JP6VYKGR');
         `}
       </Script>
 
