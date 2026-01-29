@@ -23,7 +23,7 @@ export default function PlatformLinks() {
           <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
             {/* 틱톡 */}
             <Link
-              href="https://www.tiktok.com/@gourmetzip"
+              href="https://www.tiktok.com/@myeoncipe"
               target="_blank"
               rel="noopener noreferrer"
               className="group flex items-center gap-2.5 rounded-2xl border border-gray-100 bg-white px-5 py-2.5 shadow-sm transition-all hover:-translate-y-1 hover:bg-black hover:text-white hover:shadow-xl dark:border-gray-800 dark:bg-gray-900 dark:hover:bg-white dark:hover:text-black"
@@ -40,7 +40,7 @@ export default function PlatformLinks() {
 
             {/* 유튜브 */}
             <Link
-              href="https://www.youtube.com/channel/UCVgAAVNMJk3Z4mHR6iEsYfw"
+              href="https://www.youtube.com/channel/UC5sstROQBLgzn_BWx6UwkNw"
               target="_blank"
               rel="noopener noreferrer"
               className="group flex items-center gap-2.5 rounded-2xl border border-gray-100 bg-white px-5 py-2.5 shadow-sm transition-all hover:-translate-y-1 hover:border-[#FF0000] hover:bg-[#FF0000] hover:text-white hover:shadow-xl dark:border-gray-800 dark:bg-gray-900"
@@ -51,7 +51,7 @@ export default function PlatformLinks() {
 
             {/* 인스타그램 */}
             <Link
-              href="https://www.instagram.com/gourmetzip"
+              href="https://www.instagram.com/myeoncipe"
               target="_blank"
               rel="noopener noreferrer"
               className="group flex items-center gap-2.5 rounded-2xl border border-gray-100 bg-white px-5 py-2.5 shadow-sm transition-all hover:-translate-y-1 hover:border-transparent hover:bg-gradient-to-tr hover:from-[#f9ce34] hover:via-[#ee2a7b] hover:to-[#6228d7] hover:text-white hover:shadow-xl dark:border-gray-800 dark:bg-gray-900"
